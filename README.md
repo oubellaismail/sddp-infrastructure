@@ -2,10 +2,29 @@
 
 Terraform for the Secure-by-Default Delivery Platform's Kubernetes cluster itself: node pools, VPC/networking, and cluster-level IAM.
 
-**Target: Google Cloud Platform, GKE, funded by GCP's free tier.**
+**Target: DigitalOcean, DOKS, funded by GitHub Student Developer Pack credit.**
 
 Part of the SDDP repo split (ADR-005). Rare, highest-review-weight repo — a mistake here affects the entire cluster and every tenant.
 
-Also responsible for the one necessarily-imperative bootstrap step: provisioning the cluster and installing ArgoCD, before GitOps can take over anything (cluster-architecture-spec.md §1a).
+Also responsible for the one necessarily-imperative bootstrap step: provisioning the cluster and installing ArgoCD, before GitOps can take over anything.
 
-Design docs: see the `pfa` repo.
+## Usage
+
+Requires a DigitalOcean API token available as `DIGITALOCEAN_TOKEN` (this repo loads it from a gitignored `.env` via `direnv` — see `.envrc`).
+
+```
+terraform init
+terraform plan
+terraform apply
+```
+
+Fetch cluster access after `apply`:
+```
+doctl kubernetes cluster kubeconfig save sddp-poc
+kubectl get nodes
+```
+
+Tear down between sessions to conserve credit:
+```
+terraform destroy
+```
