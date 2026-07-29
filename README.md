@@ -28,3 +28,12 @@ Tear down between sessions to conserve credit:
 ```
 terraform destroy
 ```
+
+ArgoCD is installed via the `helm` Terraform provider (`argocd.tf`) — no manual `helm install`, so `terraform apply` alone reproduces it. Access it:
+```
+kubectl port-forward svc/argocd-server -n argocd 8080:443
+```
+Then open `https://localhost:8080` (self-signed cert, accept the browser warning). Username `admin`, password from:
+```
+kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
+```
