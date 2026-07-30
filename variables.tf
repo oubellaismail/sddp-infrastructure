@@ -24,3 +24,10 @@ variable "node_count" {
   type = number
   default = 2
 }
+
+
+variable "argocd_repo_ssh_private_key" {
+  description = "SSH private key for ArgoCD's read-only deploy key on sddp-platform-config"
+  type        = string
+  sensitive   = true
+}
