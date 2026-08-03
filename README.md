@@ -24,6 +24,16 @@ doctl kubernetes cluster kubeconfig save sddp-poc
 kubectl get nodes
 ```
 
+### Attach the container registry (imperative — re-run after every recreate)
+
+Terraform provisions the registry (`docr.tf`), but DigitalOcean has **no Terraform resource** for associating a registry with a cluster. That association is a one-shot imperative command:
+```
+doctl kubernetes cluster registry add sddp-poc
+```
+It injects pull credentials into every namespace (including ones GitOps creates later), so workloads pull from the registry with no per-pod `imagePullSecret`.
+
+Because it is not Terraform-managed, **it does not survive `terraform destroy`** — after any destroy/recreate the cluster starts with no registry access and pulls fail (`ErrImagePull` / `401 unauthorized`) until you run the command again. Run it once after each `apply`.
+
 Tear down between sessions to conserve credit:
 ```
 terraform destroy
