@@ -23,9 +23,14 @@ resource "helm_release" "argocd" {
   # Kyverno Helm chart, which is large).
   values = [yamlencode({
     controller = {
+      # The application-controller caches live cluster state and grew past 512Mi
+      # as more apps/policies came under management — it was OOMKilled (exit 137)
+      # in a restart loop, wedging syncs. Bumped to a 1Gi limit (POL-03 large-tier
+      # ceiling: mem request <=512Mi, mem limit <=1Gi) with a 256Mi request for
+      # headroom. Still no CPU limit (POL-03 spec v1.2).
       resources = {
-        requests = { cpu = "100m", memory = "128Mi" }
-        limits   = { memory = "512Mi" }
+        requests = { cpu = "100m", memory = "256Mi" }
+        limits   = { memory = "1Gi" }
       }
     }
     repoServer = {
