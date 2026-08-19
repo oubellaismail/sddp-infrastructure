@@ -15,7 +15,7 @@ variable "cluster_name" {
 variable "node_size" {
   description = "Droplet size slug for the default node pool"
   type        = string
-  default     = "s-2vcpu-2gb"
+  default     = "s-2vcpu-4gb"
 }
 
 
@@ -44,4 +44,18 @@ variable "registry_name" {
   description = "DOCR registry name — globally unique across all DigitalOcean customers; becomes registry.digitalocean.com/<name>"
   type        = string
   default     = "sddp-registry"
+}
+
+
+variable "infisical_client_id" {
+  description = "Infisical machine-identity (Universal Auth) client ID — External Secrets Operator uses it to read secrets from the Infisical Cloud project"
+  type        = string
+  sensitive   = true
+}
+
+
+variable "infisical_client_secret" {
+  description = "Infisical machine-identity (Universal Auth) client secret — the single standing bootstrap credential ESO logs in with"
+  type        = string
+  sensitive   = true
 }
