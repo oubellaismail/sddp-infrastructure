@@ -22,7 +22,7 @@ variable "node_size" {
 variable "node_count" {
   description = "Number of nodes in the default node pool"
   type        = number
-  default     = 2
+  default     = 3
 }
 
 
